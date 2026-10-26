@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<title>QSO Logger V1.6 - Boş Başlangıç</title>
+<meta TB7CEA TARAFINDAN HAZIRLANDI="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --header-bg: #f2f2f2;
+  --border-color: #dddddd;
+  --button-bg: #4CAF50;
+  --button-text: white;
+  --button-hover: #45a049;
+  --highlight-color: #ffcccc;
+  --input-bg: #ffffff;
+  --input-text: #333333;
+  --table-alt-row: #f9f9f9;
+  --danger-color: #f44336;
+  --danger-hover: #d32f2d;
+  --filter-bg: #e7f3ff;
+  --search-bg: #fff3cd;
+  --search-border: #ffeeba;
+  --info-bg: #e8f4fd;
+  --info-border: #bee5eb;
+  --csv-color: #ff0000;
+  --notification-bg: #d4edda;
+  --notification-text: #155724;
+  --notification-border: #c3e6cb;
+  --warning-bg: #fff3cd;
+  --warning-text: #856404;
+  --warning-border: #ffeeba;
+  --link-color: #0066cc;
+  --link-hover: #004499;
+  --qso-number-bg: #e8f4fd;
+  --qso-number-text: #0c5460;
+  --valid-color: #4CAF50;
+  --invalid-color: #f44336;
+}
+[data-theme="dark"] {
+  --bg-color: #222222;
+  --text-color: #eeeeee;
+  --header-bg: #333333;
+  --border-color: #444444;
+  --button-bg: #2a662c;
+  --button-text: #eeeeee;
+  --button-hover: #3a763c;
+  --highlight-color: #990000;
+  --input-bg: #333333;
+  --input-text: #eeeeee;
+  --table-alt-row: #2a2a2a;
+  --danger-color: #c62828;
+  --danger-hover: #b71c1c;
+  --filter-bg: #1e3a5f;
+  --search-bg: #4d3800;
+  --search-border: #856404;
+  --info-bg: #0c5460;
+  --info-border: #0c5460;
+  --csv-color: #ff6666;
+  --notification-bg: #1e4620;
+  --notification-text: #d4edda;
+  --notification-border: #2a662c;
+  --warning-bg: #4d3800;
+  --warning-text: #fff3cd;
+  --warning-border: #856404;
+  --link-color: #4da6ff;
+  --link-hover: #80c1ff;
+  --qso-number-bg: #0c5460;
+  --qso-number-text: #e8f4fd;
+  --valid-color: #4CAF50;
+  --invalid-color: #f44336;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+th {
+  background-color: var(--header-bg);
+  position: relative;
+}
+tr:nth-child(even) {
+  background-color: var(--table-alt-row);
+}
+button {
+  margin: 5px;
+  padding: 8px 12px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: var(--button-hover);
+}
+.danger-button {
+  background-color: var(--danger-color);
+}
+.danger-button:hover {
+  background-color: var(--danger-hover);
+}
+.controls {
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+input[type="text"],
+textarea,
+select,
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="file"] {
+  width: 90%;
+  padding: 8px;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+textarea {
+  height: 50px;
+  resize: vertical;
+  text-transform: uppercase;
+}
+.status {
+  color: #4caf50;
+  margin-left: 10px;
+  display: none;
+  padding: 5px 10px;
+  background-color: rgba(76, 175, 80, 0.1);
+  border-radius: 4px;
+}
+.search-filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+.search-quickq-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+  position: relative;
+  flex-direction: row;
+  width: 320px;
+}
+.search-container label {
+  font-weight: bold;
+  margin-right: 6px;
+  white-space: nowrap;
+  user-select: none;
+}
+.search-input-row {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  align-items: center;
+}
+.filter-container {
+  flex: 1;
+  padding: 10px;
+  background-color: var(--filter-bg);
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-container select {
+  width: auto;
+  margin-right: 15px;
+}
+.filter-info {
+  margin-left: auto;
+  font-style: italic;
+}
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  z-index: 10;
+  position: relative;
+}
+.highlight {
+  background-color: var(--highlight-color) !important;
+}
+tr.hidden {
+  display: none;
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.title-container {
+  display: flex;
+  flex-direction: column;
+}
+h1 {
+  margin: 0;
+}
+.version {
+  font-size: 0.8em;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin-left: 10px;
+}
+.author {
+  font-size: 1.1em;
+  margin-top: 5px;
+  color: var(--text-color);
+  font-weight: bold;
+}
+.author a {
+  color: var(--button-bg);
+  text-decoration: none;
+  font-weight: bold;
+}
+.author a:hover {
+  text-decoration: underline;
+}
+.theme-switch {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.theme-switch label {
+  margin-right: 10px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #2a662c;
+}
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background-color: var(--bg-color);
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  user-select: none;
+}
+.modal h3 {
+  margin-top: 0;
+  color: var(--danger-color);
+}
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+#searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 10000;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 0 0 4px 4px;
+  display: none;
+}
+#searchResults div {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+#searchResults div:last-child {
+  border-bottom: none;
+}
+#searchResults div.highlighted {
+  background-color: var(--highlight-color);
+}
+.import-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+#importFileLabel {
+  display: inline-block;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  user-select: none;
+}
+#importFileLabel:hover {
+  background-color: var(--filter-bg);
+}
+#csvFileInput {
+  display: none;
+}
+.callsign-link {
+  color: var(--link-color);
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 5px;
+  font-weight: bold;
+}
+.callsign-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+.callsign-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.qso-number {
+  background-color: var(--qso-number-bg);
+  color: var(--qso-number-text);
+  font-weight: bold;
+  text-align: center;
+  border-radius: 3px;
+  padding: 2px 5px;
+  min-width: 30px;
+  display: inline-block;
+}
+.total-qso {
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--button-bg);
+  margin-top: 5px;
+  user-select: none;
+}
+.table-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+  gap: 10px;
+}
+.csv-path-container {
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: var(--text-color);
+  user-select: text;
+  max-width: 80vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.csv-warning {
+  color: var(--danger-color);
+  font-weight: 700;
+  margin-left: 10px;
+  user-select: none;
+  font-size: 1em;
+  background-color: #ffe6e6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--danger-color);
+}
+
+/* Yeni Kayıt Başarılı Modal */
+#saveSuccessModal {
+  display: none;
+  position: fixed;
+  z-index: 1100;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  background-color: var(--notification-bg);
+  color: var(--notification-text);
+  border: 1px solid var(--notification-border);
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  font-weight: 700;
+  font-size: 1.2em;
+  user-select: none;
+  text-align: center;
+  min-width: 200px;
+}
+
+/* Hızlı Q Kodu Bölümü */
+.quick-q-container {
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--info-bg);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  max-width: 280px;
+  flex-shrink: 0;
+}
+.quick-q-container label {
+  font-weight: bold;
+  white-space: nowrap;
+  user-select: none;
+}
+.quick-q-input {
+  width: 140px;
+  padding: 6px 8px;
+  font-size: 1em;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.quick-q-button {
+  padding: 6px 12px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+.quick-q-button:hover {
+  background-color: var(--button-hover);
+}
+
+/* Q Kodu Açıklama Modalı */
+#quickQModal {
+  display: none;
+  position: fixed;
+  z-index: 1200;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+#quickQModal .modal-content {
+  background-color: var(--bg-color);
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  width: 350px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  text-align: center;
+  user-select: none;
+}
+#quickQModal h3 {
+  margin-top: 0;
+  color: var(--button-bg);
+}
+#quickQModal p {
+  white-space: pre-line;
+  margin-top: 10px;
+  text-align: left;
+  font-size: 0.95em;
+  line-height: 1.3em;
+}
+.modal-close-btn {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.modal-close-btn:hover {
+  background-color: var(--button-hover);
+}
+
+/* Pagination Styles */
+.pagination {
+  margin-top: 10px;
+  text-align: center;
+  user-select: none;
+}
+.pagination button {
+  margin: 0 3px;
+  padding: 6px 12px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 40px;
+}
+.pagination button:hover {
+  background-color: var(--button-hover);
+}
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: default;
+}
+.pagination .active {
+  background-color: var(--danger-color);
+  cursor: default;
+}
+</style>
+</head>
+<body>
+<div class="header-container">
+  <div class="title-container">
+    <h1>QSO Logger <span class="version">V1.6</span></h1>
+    <div class="author">
+      <a href="https://www.qrz.com/db/TA1TLA" target="_blank" rel="noopener noreferrer">TA1TLA</a> tarafından hazırlanmıştır
+    </div>
+    <div id="totalQSO" class="total-qso">Toplam QSO: 0</div>
+    <div class="csv-path-container" title="Son alınan yedek dosyası">
+      <div id="csvPath">Son alınan yedek: Henüz yok<span id="csvWarning" class="csv-warning" style="display:none;"></span></div>
+    </div>
+  </div>
+  <div class="theme-switch">
+    <label>Tema:</label>
+    <label class="switch">
+      <input type="checkbox" id="themeToggle" />
+      <span class="slider"></span>
+    </label>
+  </div>
+</div>
+
+<!-- Arama ve Hızlı Q Kodu Yan Yana -->
+<div class="search-filter-container">
+  <div class="search-quickq-row">
+    <div class="search-container" role="search" aria-label="Arama">
+      <label for="searchInput">Arama:</label>
+      <div class="search-input-row">
+        <input type="text" id="searchInput" placeholder="Çağrı işareti, isim, konum vb. arayın..." autocomplete="off" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false" aria-owns="searchResults" role="combobox" />
+        <button onclick="searchTable()" aria-label="Ara">Ara</button>
+        <button onclick="clearSearch()" aria-label="Temizle">Temizle</button>
+      </div>
+      <div id="searchResults" role="listbox" tabindex="-1"></div>
+    </div>
+    <div class="quick-q-container" role="region" aria-label="Hızlı Q kodu sor">
+      <label for="quickQInput">Hızlı Q kodu sor:</label>
+      <input type="text" id="quickQInput" class="quick-q-input" placeholder="QSK gibi..." />
+      <button class="quick-q-button" onclick="showQuickQAnswer()">Göster</button>
+    </div>
+  </div>
+
+  <div class="filter-container">
+    <label>Filtreleme:</label>
+    <select id="yearFilter">
+      <option value="">Tüm Yıllar</option>
+    </select>
+
+    <select id="monthFilter">
+      <option value="">Tüm Aylar</option>
+      <option value="01">Ocak</option>
+      <option value="02">Şubat</option>
+      <option value="03">Mart</option>
+      <option value="04">Nisan</option>
+      <option value="05">Mayıs</option>
+      <option value="06">Haziran</option>
+      <option value="07">Temmuz</option>
+      <option value="08">Ağustos</option>
+      <option value="09">Eylül</option>
+      <option value="10">Ekim</option>
+      <option value="11">Kasım</option>
+      <option value="12">Aralık</option>
+    </select>
+
+    <button onclick="applyFilters()">Filtrele</button>
+    <button onclick="clearFilters()">Temizle</button>
+    <span class="filter-info" id="filterInfo"></span>
+  </div>
+</div>
+
+<!-- Kayıt Başarılı Modal -->
+<div id="saveSuccessModal">Kayıt başarılı...</div>
+
+<div class="controls">
+  <button onclick="addRow()">Yeni QSO</button>
+  <button id="saveAllBtn" onclick="saveAll()">Tümünü Kaydet</button>
+  <button onclick="exportToCSV()">Yedekle</button>
+  <div class="import-container">
+    <label for="csvFileInput" id="importFileLabel" title="Dosya seçilmedi">Dosya seçilmedi</label>
+    <input type="file" id="csvFileInput" accept=".csv" />
+    <button onclick="importCSV()">Yedekten Al</button>
+  </div>
+</div>
+
+<div class="table-controls">
+  <button class="danger-button" onclick="showDeleteAllModal()">Tüm Kayıtları Sil</button>
+</div>
+
+<table id="logTable">
+  <thead>
+    <tr>
+      <th>QSO No</th>
+      <th>Tarih</th>
+      <th>Saat</th>
+      <th>Çağrı İşareti</th>
+      <th>QRZ</th>
+      <th>İsim</th>
+      <th>DMR ID</th>
+      <th>Röle / Frekans</th>
+      <th>Mod Tipi</th>
+      <th>QTH (Konum)</th>
+      <th>Notlar</th>
+      <th>İşlemler</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Sayfalama ile gösterilecek satırlar buraya eklenecek -->
+  </tbody>
+</table>
+
+<div class="pagination" id="paginationControls"></div>
+
+<!-- Silme Onay Modalı -->
+<div id="deleteAllModal" class="modal">
+  <div class="modal-content" id="deleteAllModalContent">
+    <h3>Dikkat! Tüm Kayıtlar Silinecek</h3>
+    <p>Bu işlem geri alınamaz. Devam etmek için aşağıdaki soruyu cevaplayın:</p>
+    <p id="captchaQuestion"></p>
+    <input type="number" id="captchaAnswer" placeholder="Cevabınız" />
+    <div class="modal-buttons" id="captchaButtons">
+      <button onclick="closeDeleteAllModal()">İptal</button>
+      <button class="danger-button" onclick="confirmDeleteAll()">Sil</button>
+    </div>
+  </div>
+</div>
+
+<!-- Q Kodu Açıklama Modalı -->
+<div id="quickQModal" class="modal" tabindex="0" aria-modal="true" role="dialog" aria-labelledby="quickQModalTitle" aria-describedby="quickQDescription">
+  <div class="modal-content">
+    <h3 id="quickQModalTitle">Q Kodu Açıklaması</h3>
+    <p id="quickQDescription"></p>
+    <button class="modal-close-btn" id="quickQCloseBtn" onclick="closeQuickQModal()">Kapat</button>
+  </div>
+</div>
+
+<script>
+  let lastCsvFileName = null;
+  let allRowsData = [];
+  const rowsPerPage = 25;
+  let currentPage = 1;
+
+  // Arama geçmişi için dizi
+  let searchHistory = [];
+  let suggestionIndex = -1;
+
+  // Dosya seçildiğinde label güncelleme
+  const csvFileInput = document.getElementById("csvFileInput");
+  const importFileLabel = document.getElementById("importFileLabel");
+  csvFileInput.addEventListener("change", () => {
+    if (csvFileInput.files.length > 0) {
+      importFileLabel.textContent = csvFileInput.files[0].name;
+      importFileLabel.title = csvFileInput.files[0].name;
+    } else {
+      importFileLabel.textContent = "Dosya seçilmedi";
+      importFileLabel.title = "Dosya seçilmedi";
+    }
+  });
+
+  function showNotification(message, type = "success", duration = 2000) {
+    const modal = document.getElementById("saveSuccessModal");
+    modal.textContent = message;
+    modal.style.display = "block";
+    modal.style.color = type === "success" ? "var(--notification-text)" : "var(--danger-color)";
+    modal.style.backgroundColor = type === "success" ? "var(--notification-bg)" : "rgba(244, 67, 54, 0.9)";
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, duration);
+  }
+
+  const themeToggle = document.getElementById("themeToggle");
+  function toggleTheme(isDark) {
+    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeToggle.checked = isDark;
+  }
+  themeToggle.addEventListener("change", function () {
+    toggleTheme(this.checked);
+  });
+
+  let captchaResult = 0;
+  function generateCaptcha() {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    captchaResult = num1 * num2;
+    document.getElementById("captchaQuestion").textContent = `Güvenlik sorusu: ${num1} × ${num2} = ?`;
+  }
+  function showDeleteAllModal() {
+    resetDeleteAllModal();
+    generateCaptcha();
+    document.getElementById("captchaAnswer").value = "";
+    document.getElementById("deleteAllModal").style.display = "block";
+  }
+  function closeDeleteAllModal() {
+    document.getElementById("deleteAllModal").style.display = "none";
+  }
+  function resetDeleteAllModal() {
+    const modalContent = document.getElementById("deleteAllModalContent");
+    modalContent.innerHTML = `
+      <h3>Dikkat! Tüm Kayıtlar Silinecek</h3>
+      <p>Bu işlem geri alınamaz. Devam etmek için aşağıdaki soruyu cevaplayın:</p>
+      <p id="captchaQuestion"></p>
+      <input type="number" id="captchaAnswer" placeholder="Cevabınız" />
+      <div class="modal-buttons" id="captchaButtons">
+        <button onclick="closeDeleteAllModal()">İptal</button>
+        <button class="danger-button" onclick="confirmDeleteAll()">Sil</button>
+      </div>
+    `;
+    generateCaptcha();
+  }
+  function confirmDeleteAll() {
+    const userAnswerInput = document.getElementById("captchaAnswer");
+    if (!userAnswerInput) return;
+
+    const userAnswer = parseInt(userAnswerInput.value);
+    if (userAnswer === captchaResult) {
+      allRowsData = [];
+      saveData();
+      currentPage = 1;
+      filteredRows = allRowsData;
+      renderTablePage(currentPage);
+      updateTotalQSO();
+
+      const modalContent = document.getElementById("deleteAllModalContent");
+      modalContent.innerHTML = `
+        <h3>Tüm kayıtlar silindi.</h3>
+        <button id="modalOkButton">Tamam</button>
+      `;
+
+      document.getElementById("modalOkButton").addEventListener("click", () => {
+        closeDeleteAllModal();
+      });
+    } else {
+      showNotification("Güvenlik sorusuna yanlış cevap verdiniz. Lütfen tekrar deneyin.", "warning");
+    }
+  }
+
+  function populateYearOptions() {
+    const yearSelect = document.getElementById("yearFilter");
+    const currentYear = new Date().getFullYear();
+    while (yearSelect.options.length > 1) {
+      yearSelect.remove(1);
+    }
+    for (let year = currentYear; year >= currentYear - 5; year--) {
+      const option = document.createElement("option");
+      option.value = year;
+      option.textContent = year;
+      yearSelect.appendChild(option);
+    }
+  }
+
+  function applyFilters() {
+    const yearFilter = document.getElementById("yearFilter").value;
+    const monthFilter = document.getElementById("monthFilter").value;
+    let filtered = allRowsData;
+
+    if (yearFilter) {
+      filtered = filtered.filter(row => {
+        if (!row[0]) return false;
+        const year = row[0].split("-")[0];
+        return year === yearFilter;
+      });
+    }
+    if (monthFilter) {
+      filtered = filtered.filter(row => {
+        if (!row[0]) return false;
+        const month = row[0].split("-")[1];
+        return month === monthFilter;
+      });
+    }
+
+    filteredRows = filtered;
+    currentPage = 1;
+    renderTablePage(currentPage);
+    updateFilterInfo(yearFilter, monthFilter, filtered.length);
+  }
+
+  function updateFilterInfo(year, month, count) {
+    const filterInfo = document.getElementById("filterInfo");
+    let infoText = "";
+    if (year || month) {
+      if (year && month) {
+        const monthName = document.querySelector(`#monthFilter option[value="${month}"]`).textContent;
+        infoText = `${year} ${monthName} - ${count} kayıt`;
+      } else if (year) {
+        infoText = `${year} - ${count} kayıt`;
+      } else if (month) {
+        const monthName = document.querySelector(`#monthFilter option[value="${month}"]`).textContent;
+        infoText = `${monthName} - ${count} kayıt`;
+      }
+    }
+    filterInfo.textContent = infoText;
+  }
+
+  function clearFilters() {
+    document.getElementById("yearFilter").value = "";
+    document.getElementById("monthFilter").value = "";
+    document.getElementById("filterInfo").textContent = "";
+    filteredRows = allRowsData;
+    currentPage = 1;
+    renderTablePage(currentPage);
+  }
+
+  function searchTable() {
+    const searchInput = document.getElementById("searchInput");
+    const searchText = searchInput.value.toUpperCase();
+    if (searchText.trim() === "") {
+      clearSearch();
+      return;
+    }
+    if (!searchHistory.includes(searchText)) {
+      searchHistory.push(searchText);
+      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    }
+    filteredRows = allRowsData.filter(row => {
+      return row.some(cell => cell && cell.toString().toUpperCase().includes(searchText));
+    });
+    currentPage = 1;
+    renderTablePage(currentPage);
+    hideSearchSuggestions();
+  }
+
+  function clearSearch() {
+    document.getElementById("searchInput").value = "";
+    filteredRows = allRowsData;
+    currentPage = 1;
+    renderTablePage(currentPage);
+    hideSearchSuggestions();
+  }
+
+  let filteredRows = [];
+
+  function updateTotalQSO() {
+    const count = allRowsData.length;
+    document.getElementById("totalQSO").textContent = `Toplam QSO: ${count}`;
+  }
+
+  function renderTablePage(page) {
+    const tbody = document.querySelector("#logTable tbody");
+    tbody.innerHTML = "";
+    const start = (page - 1) * rowsPerPage;
+    const end = Math.min(start + rowsPerPage, filteredRows.length);
+
+    for (let i = start; i < end; i++) {
+      const rowData = filteredRows[i];
+      const row = createTableRow(rowData, i);
+      tbody.appendChild(row);
+    }
+    updateQSONumbers();
+    renderPaginationControls();
+  }
+
+  function createTableRow(data, index) {
+    const row = document.createElement("tr");
+
+    const qsoNumberCell = document.createElement("td");
+    qsoNumberCell.innerHTML = `<span class="qso-number">${allRowsData.length - index}</span>`;
+    row.appendChild(qsoNumberCell);
+
+    const dateCell = document.createElement("td");
+    const dateInput = document.createElement("input");
+    dateInput.type = "date";
+    dateInput.value = data[0] || "";
+    dateInput.addEventListener("change", () => {
+      allRowsData[index][0] = dateInput.value;
+      saveData();
+    });
+    dateCell.appendChild(dateInput);
+    row.appendChild(dateCell);
+
+    const timeCell = document.createElement("td");
+    const timeInput = document.createElement("input");
+    timeInput.type = "time";
+    timeInput.value = data[1] || "";
+    timeInput.addEventListener("change", () => {
+      allRowsData[index][1] = timeInput.value;
+      saveData();
+    });
+    timeCell.appendChild(timeInput);
+    row.appendChild(timeCell);
+
+    const callsignCell = document.createElement("td");
+    const callsignContainer = document.createElement("div");
+    callsignContainer.className = "callsign-container";
+
+    const callsignInput = document.createElement("input");
+    callsignInput.type = "text";
+    callsignInput.value = data[2] ? data[2].toUpperCase() : "";
+    callsignInput.addEventListener("input", () => {
+      callsignInput.value = callsignInput.value.toUpperCase();
+      updateCallsignLink();
+    });
+    callsignInput.addEventListener("change", () => {
+      allRowsData[index][2] = callsignInput.value;
+      saveData();
+    });
+
+    const callsignLink = document.createElement("a");
+    callsignLink.href = "";
+    callsignLink.target = "_blank";
+    callsignLink.rel = "noopener noreferrer";
+    callsignLink.className = "callsign-link";
+    callsignLink.textContent = "QRZ";
+    callsignLink.style.display = callsignInput.value.trim() ? "inline" : "none";
+
+    function updateCallsignLink() {
+      const val = callsignInput.value.trim();
+      if (val) {
+        callsignLink.href = `https://www.qrz.com/db/${val}`;
+        callsignLink.style.display = "inline";
+      } else {
+        callsignLink.href = "";
+        callsignLink.style.display = "none";
+      }
+    }
+    updateCallsignLink();
+
+    callsignContainer.appendChild(callsignInput);
+    callsignContainer.appendChild(callsignLink);
+    callsignCell.appendChild(callsignContainer);
+    row.appendChild(callsignCell);
+
+    const qrzCell = document.createElement("td");
+    const qrzSelect = document.createElement("select");
+    ["Yok", "Var"].forEach((option) => {
+      const opt = document.createElement("option");
+      opt.value = option;
+      opt.textContent = option;
+      if (option === (data[3] || "Yok")) opt.selected = true;
+      qrzSelect.appendChild(opt);
+    });
+    qrzSelect.addEventListener("change", () => {
+      allRowsData[index][3] = qrzSelect.value;
+      saveData();
+    });
+    qrzCell.appendChild(qrzSelect);
+    row.appendChild(qrzCell);
+
+    const nameCell = document.createElement("td");
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.value = data[4] ? data[4].toUpperCase() : "";
+    nameInput.addEventListener("input", () => {
+      nameInput.value = nameInput.value.toUpperCase();
+    });
+    nameInput.addEventListener("change", () => {
+      allRowsData[index][4] = nameInput.value;
+      saveData();
+    });
+    nameCell.appendChild(nameInput);
+    row.appendChild(nameCell);
+
+    const dmrCell = document.createElement("td");
+    const dmrInput = document.createElement("input");
+    dmrInput.type = "number";
+    dmrInput.min = "1000000";
+    dmrInput.max = "9999999";
+    dmrInput.value = data[5] || "";
+    dmrInput.placeholder = "DMR ID";
+    dmrInput.addEventListener("change", () => {
+      allRowsData[index][5] = dmrInput.value;
+      saveData();
+    });
+    dmrCell.appendChild(dmrInput);
+    row.appendChild(dmrCell);
+
+    const roleCell = document.createElement("td");
+    const roleInput = document.createElement("input");
+    roleInput.type = "text";
+    roleInput.value = data[6] ? data[6].toUpperCase() : "";
+    roleInput.addEventListener("input", () => {
+      roleInput.value = roleInput.value.toUpperCase();
+    });
+    roleInput.addEventListener("change", () => {
+      allRowsData[index][6] = roleInput.value;
+      saveData();
+    });
+    roleCell.appendChild(roleInput);
+    row.appendChild(roleCell);
+
+    const modTypeCell = document.createElement("td");
+    const modTypeSelect = document.createElement("select");
+    ["", "Analog", "Digital", "HF", "Diğer"].forEach((option) => {
+      const opt = document.createElement("option");
+      opt.value = option;
+      opt.textContent = option;
+      if (option === data[7]) opt.selected = true;
+      modTypeSelect.appendChild(opt);
+    });
+    modTypeSelect.addEventListener("change", () => {
+      allRowsData[index][7] = modTypeSelect.value;
+      saveData();
+    });
+    modTypeCell.appendChild(modTypeSelect);
+    row.appendChild(modTypeCell);
+
+    const qthCell = document.createElement("td");
+    const qthInput = document.createElement("input");
+    qthInput.type = "text";
+    qthInput.value = data[8] ? data[8].toUpperCase() : "";
+    qthInput.addEventListener("input", () => {
+      qthInput.value = qthInput.value.toUpperCase();
+    });
+    qthInput.addEventListener("change", () => {
+      allRowsData[index][8] = qthInput.value;
+      saveData();
+    });
+    qthCell.appendChild(qthInput);
+    row.appendChild(qthCell);
+
+    const notesCell = document.createElement("td");
+    const notesTextarea = document.createElement("textarea");
+    notesTextarea.value = data[9] ? data[9].toUpperCase() : "";
+    notesTextarea.addEventListener("input", () => {
+      notesTextarea.value = notesTextarea.value.toUpperCase();
+    });
+    notesTextarea.addEventListener("change", () => {
+      allRowsData[index][9] = notesTextarea.value;
+      saveData();
+    });
+    notesCell.appendChild(notesTextarea);
+    row.appendChild(notesCell);
+
+    const actionsCell = document.createElement("td");
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Sil";
+    deleteButton.className = "danger-button";
+    deleteButton.onclick = () => {
+      if (confirm("Bu kaydı silmek istediğinize emin misiniz?")) {
+        allRowsData.splice(index, 1);
+        saveData();
+        if ((currentPage - 1) * rowsPerPage >= allRowsData.length && currentPage > 1) {
+          currentPage--;
+        }
+        filteredRows = allRowsData;
+        renderTablePage(currentPage);
+        updateTotalQSO();
+      }
+    };
+    actionsCell.appendChild(deleteButton);
+    row.appendChild(actionsCell);
+
+    return row;
+  }
+
+  function updateQSONumbers() {
+    const tbody = document.querySelector("#logTable tbody");
+    const rows = tbody.querySelectorAll("tr");
+    const start = (currentPage - 1) * rowsPerPage;
+    rows.forEach((row, i) => {
+      const qsoNumberCell = row.querySelector("td:first-child .qso-number");
+      if (qsoNumberCell) {
+        qsoNumberCell.textContent = allRowsData.length - (start + i);
+      }
+    });
+  }
+
+  function saveData() {
+    localStorage.setItem("amatorTelsizLog", JSON.stringify(allRowsData));
+    updateTotalQSO();
+  }
+
+  function saveAll() {
+    saveData();
+    showNotification("Tüm kayıtlar kaydedildi.");
+  }
+
+  function loadData() {
+    const savedData = localStorage.getItem("amatorTelsizLog");
+    if (savedData) {
+      allRowsData = JSON.parse(savedData);
+    } else {
+      allRowsData = [];
+      saveData();
+    }
+    filteredRows = allRowsData;
+    currentPage = 1;
+    renderTablePage(currentPage);
+    updateTotalQSO();
+
+    const savedSearchHistory = localStorage.getItem("searchHistory");
+    if (savedSearchHistory) {
+      searchHistory = JSON.parse(savedSearchHistory);
+    }
+  }
+
+  function addRow() {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    const hh = String(now.getHours()).padStart(2, "0");
+    const min = String(now.getMinutes()).padStart(2, "0");
+
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+    const timeStr = `${hh}:${min}`;
+
+    allRowsData.unshift([dateStr, timeStr, "", "Yok", "", "", "", "", "", ""]);
+    filteredRows = allRowsData;
+    currentPage = 1;
+    renderTablePage(currentPage);
+    saveData();
+  }
+
+  function createCSVContent() {
+    let csvContent =
+      "QSO No,Tarih,Saat,Çağrı İşareti,QRZ,İsim,DMR ID,Röle,Mod Tipi,QTH (Konum),Notlar\n";
+
+    allRowsData.forEach((rowData, index) => {
+      let dateValue = "";
+      if (rowData[0]) {
+        const parts = rowData[0].split("-");
+        if (parts.length === 3) {
+          dateValue = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        } else {
+          dateValue = rowData[0];
+        }
+      }
+      const row = [
+        allRowsData.length - index,
+        dateValue,
+        rowData[1] || "",
+        rowData[2] || "",
+        rowData[3] || "Yok",
+        rowData[4] || "",
+        rowData[5] || "",
+        rowData[6] || "",
+        rowData[7] || "",
+        rowData[8] || "",
+        rowData[9] || "",
+      ];
+      const escapedRow = row.map(val => {
+        if (typeof val === "string" && (val.includes(",") || val.includes('"'))) {
+          return `"${val.replace(/"/g, '""')}"`;
+        }
+        return val;
+      });
+      csvContent += escapedRow.join(",") + "\n";
+    });
+    return csvContent;
+  }
+
+  function getWeekdayName(date) {
+    const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+    return days[date.getDay()];
+  }
+
+  function exportToCSV() {
+    const csvContent = createCSVContent();
+    const now = new Date();
+    const dd = String(now.getDate()).padStart(2, "0");
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const yyyy = now.getFullYear();
+    const weekday = getWeekdayName(now);
+    const hh = String(now.getHours()).padStart(2, "0");
+    const min = String(now.getMinutes()).padStart(2, "0");
+
+    const filename = `${dd}-${mm}-${yyyy}-${weekday}-${hh}${min}.csv`;
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    lastCsvFileName = filename;
+    localStorage.setItem("lastCsvFileName", lastCsvFileName);
+    localStorage.setItem("lastBackupDate", now.toISOString());
+    updateCsvPathDisplay();
+
+    showNotification("CSV dosyası indirildi.");
+  }
+
+  function updateCsvPathDisplay() {
+    const csvPathDiv = document.getElementById("csvPath");
+    const csvWarningSpan = document.getElementById("csvWarning");
+    if (lastCsvFileName) {
+      csvPathDiv.textContent = `Son alınan yedek: ${lastCsvFileName}`;
+      csvPathDiv.appendChild(csvWarningSpan);
+      const lastBackupDateStr = localStorage.getItem("lastBackupDate");
+      if (lastBackupDateStr) {
+        const lastBackupDate = new Date(lastBackupDateStr);
+        const now = new Date();
+        const diffTime = now.getTime() - lastBackupDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays >= 1) {
+          csvWarningSpan.style.display = "inline";
+          csvWarningSpan.textContent = ` ${diffDays} gündür yedek alınmadı! Lütfen yedekleyin.`;
+        } else {
+          csvWarningSpan.style.display = "none";
+          csvWarningSpan.textContent = "";
+        }
+      } else {
+        csvWarningSpan.style.display = "inline";
+        csvWarningSpan.textContent = " Yedek tarihi bulunamadı! Lütfen yedekleyin.";
+      }
+    } else {
+      csvPathDiv.textContent = "Son alınan yedek: Henüz yok";
+      csvPathDiv.appendChild(csvWarningSpan);
+      csvWarningSpan.style.display = "inline";
+      csvWarningSpan.textContent = " Henüz yedek alınmadı! Lütfen yedekleyin.";
+    }
+  }
+
+  function importCSV() {
+    const fileInput = document.getElementById("csvFileInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+      showNotification("Lütfen bir CSV dosyası seçin.", "warning");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const content = e.target.result;
+      const lines = content.split("\n");
+
+      if (lines.length > 1) {
+        allRowsData = [];
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line) {
+            const values = [];
+            let inQuotes = false;
+            let currentValue = "";
+
+            for (let j = 0; j < line.length; j++) {
+              const char = line[j];
+
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === "," && !inQuotes) {
+                values.push(currentValue);
+                currentValue = "";
+              } else {
+                currentValue += char;
+              }
+            }
+
+            values.push(currentValue);
+
+            const cleanValues = values.map((val) => {
+              if (val.startsWith('"') && val.endsWith('"')) {
+                return val.substring(1, val.length - 1).replace(/""/g, '"');
+              }
+              return val;
+            });
+
+            const rowData = cleanValues.slice(1, 11);
+            if (rowData[0]) {
+              const parts = rowData[0].split("/");
+              if (parts.length === 3) {
+                rowData[0] = `${parts[2]}-${parts[1].padStart(2,"0")}-${parts[0].padStart(2,"0")}`;
+              }
+            }
+            allRowsData.push(rowData);
+          }
+        }
+        filteredRows = allRowsData;
+        currentPage = 1;
+        renderTablePage(currentPage);
+        saveData();
+        showNotification("Yedekten alındı.");
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  const quickQCodes = {
+    "QRA": "İstasyonunuzun adı nedir?\nQRA İstasyonumun adı ………. dır",
+    "QRB": "İstasyonumdan ne kadar uzaktasınız?\nQRB İstasyonunuzdan ____ km uzaktayım.",
+    "QRD": "Nereye gidip nereden geliyorsunuz?\nQRD ____ gidiyorum, ____ den geliyorum.",
+    "QRG": "Tam olarak frekansımı söyler misiniz?\nQRG Tam olarak frekansınız _______ dır",
+    "QRH": "Frekansınız değişiyor\nQRH Evet değişiyor.\nQRH Frekansım değişiyor mu?\nQRH? Frekansım değişiyor mu?",
+    "QRI": "Gönderme tonu nasıl? (RST deki T)\nQRI Gönderme tonu 1(iyi), 2(değişken), 3(kötü)",
+    "QRK": "Sinyalimin yada istasyonumun anlaşılırlığı/okunabilirliği nasıl? (RST deki R)\nQRK Anlaşılır 1(kötü), 2(zayıf), 3(orta), 4(iyi), 5(çok iyi)",
+    "QRL": "Meşgul müsünüz?\nQRL Meşgulüm.",
+    "QRM": "Göndermeme başka sinyal karışıyor mu?\nQRM 1(yok), 2(hafif), 3(orta), 4(güçlü), 5(aşırı)",
+    "QRN": "Statik gürültüden (atmosfer parazitlerinden) etkleniyor musun?\nQRN 1(yok), 2(hafif), 3(orta), 4(güçlü), 5(aşırı)",
+    "QRO": "Güç arttırayım mı?\nQRO Evet, güç arttırın.",
+    "QRP": "Güç azaltayım mı?\nQRP Evet, güç azaltın",
+    "QRQ": "Gönderme hızını arttırayım mı?\nQRQ Evet, gönderme hızını arttırın",
+    "QRS": "Gönderme hızını azaltayım mı?\nQRS Evet, gönderme hızını azaltın",
+    "QRT": "Göndermeyi durdurayım mı?\nQRT Göndermeyi durdurun lütfen",
+    "QRU": "Başka mesajınız var mı?\nQRU Başka mesajım yok",
+    "QRV": "Hazır mısınız?\nQRV Hazırım",
+    "QRW": "X istasyonuna x frekansından çağrı yaptığınızı bildireyim mi?\nQRW Evet, x istasyonuna x frekansından çağrı yaptığımı bildirin lütfen",
+    "QRX": "Beni tekrar ne zaman çağıracaksınız?\nQRX Saat 00:00 (UTC) de frekansından çağıracağım",
+    "QRY": "Kaçıncı sıradayım?\nQRY Sıranız ____ dır",
+    "QRZ": "Beni kim arıyor?\nQRZ Sizi arayan ____",
+    "QSA": "Sinyalimin kuvveti nedir?\nQSA S1 – S9",
+    "QSB": "Sinyalimin gücünde dalgalanma var mı?\nQSB Evet dalgalanma var",
+    "QSD": "Gönderdiğim mors kodları doğrumu, anlaşılıyor mu?\nQSD Kodlarınız yanlış, sinyaliniz bozuk.",
+    "QSI": "Araya giremiyorum, x istasyonuna x KHz gönderisine giremediğimi iletin",
+    "QSK": "Beni gönderme arasında duyabiliyor musunuz?\nQSK Evet duyabiliyorum araya girebilirsiniz",
+    "QSL": "Mesaj alındı mı, onaylar mısınız?\nQSL Alındığını onaylıyorum",
+    "QSN": "Beni ya da x işaretli istasyonu x frekansı üzerinden duyabildiniz mi?\nQSN Sizi ya da x işaretli istasyonu x frekansı üzerinden duydum",
+    "QSO": "x istasyonu ile doğrudan ya da aracı ile haberleşebiliyor musunuz?\nQSO x istasyonu ile haberleşebiliyorum",
+    "QSP": "X istasyonuna aktarır mısınız?\nQSP X istasyonuna aktarıyorum",
+    "QSR": "Çağırı frekansında çağırımı tekrar edeyim mi?\nQSR Çağırınızı çağrı frekansında tekrarlayın, duyamadım",
+    "QSS": "Hangi frekansını kullanacaksınız?\nQSS Çalışma frekansı x KHz (sadece frekansın son üç hanesi)",
+    "QST": "Bütün istasyonlara genel çağrı",
+    "QSU": "X frekansı üstünden gönderme yapayım mı ya da yanıt vereyim mi?\nQSU X frekansı üstünden devam edin ya da X frekansından devam edin",
+    "QSV": "Kontrol veya ayar amacı ile devamlı V (…-)  harfi göndereyim mi?\nQSV Buradan, veya X frekansı üstünden devamlı V harfi gönderin",
+    "QSW": "Bu frekans ya da x frekansı üstünden gönderme yapacak mısınız?\nQSW Bu frekans ya da x frekansı üstünden gönderme yapacağım",
+    "QSX": "Beni x frekansı üstünden mi dinleyeceksin?\nQSX x frekansını dinliyorum",
+    "QSY": "Gönderme frekansımı değiştireyim mi?\nQSY Göndermeyi x frekansına değiştirin",
+    "QSZ": "Gönderdiğim kelime veya grubu tekrarlayayım mı?\nQSZ Evet tekrarlayın",
+    "QTA": "Xxx numaralı mesajı iptal edeyim mi?\nQTA xxx numaralı mesajı iptal edin",
+    "QTB": "Kelime sayım ile mutabık mısınız?\nQTB Mutabık değilim. Her kelime veya grubun ilk harfi veya rakamını tekrar edeceğim",
+    "QTC": "Göndereceğiniz kaç mesaj var?\nQTC X mesajım var",
+    "QTH": "Mevkiniz nedir?\nQTH Mevkim x (isim ya da enlem-boylam)",
+    "QTR": "Saat kaç?\nQTR Saat x UTC"
+  };
+
+  function showQuickQAnswer() {
+    const input = document.getElementById("quickQInput");
+    const code = input.value.trim().toUpperCase();
+    const description = quickQCodes[code];
+    if (description) {
+      document.getElementById("quickQDescription").textContent = description;
+      const modal = document.getElementById("quickQModal");
+      modal.style.display = "block";
+      modal.focus();
+    } else if (code.length === 0) {
+      alert("Lütfen bir Q kodu girin.");
+    } else {
+      alert("Bu Q kodu için açıklama bulunamadı.");
+    }
+  }
+
+  function closeQuickQModal() {
+    document.getElementById("quickQModal").style.display = "none";
+    document.getElementById("quickQInput").focus();
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("quickQModal");
+    if (event.target === modal) {
+      closeQuickQModal();
+    }
+  };
+
+  function renderPaginationControls() {
+    const paginationDiv = document.getElementById("paginationControls");
+    paginationDiv.innerHTML = "";
+
+    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "«";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTablePage(currentPage);
+      }
+    };
+    paginationDiv.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.textContent = i;
+      if (i === currentPage) {
+        pageBtn.classList.add("active");
+        pageBtn.disabled = true;
+      }
+      pageBtn.onclick = () => {
+        currentPage = i;
+        renderTablePage(currentPage);
+      };
+      paginationDiv.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "»";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTablePage(currentPage);
+      }
+    };
+    paginationDiv.appendChild(nextBtn);
+  }
+
+  // Arama geçmişi gösterimi için öneri kutusu
+  const searchInput = document.getElementById("searchInput");
+  const searchResultsDiv = document.getElementById("searchResults");
+
+  function showSearchSuggestions() {
+    const val = searchInput.value.toUpperCase();
+    if (!val) {
+      hideSearchSuggestions();
+      return;
+    }
+    const matches = searchHistory.filter(item => item.startsWith(val));
+    if (matches.length === 0) {
+      hideSearchSuggestions();
+      return;
+    }
+    searchResultsDiv.innerHTML = "";
+    matches.forEach((match, idx) => {
+      const div = document.createElement("div");
+      div.textContent = match;
+      div.setAttribute("role", "option");
+      div.id = "searchResult-" + idx;
+      div.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        selectSuggestion(idx);
+      });
+      searchResultsDiv.appendChild(div);
+    });
+    suggestionIndex = -1;
+    searchResultsDiv.style.display = "block";
+    searchInput.setAttribute("aria-expanded", "true");
+  }
+
+  function hideSearchSuggestions() {
+    searchResultsDiv.style.display = "none";
+    searchResultsDiv.innerHTML = "";
+    suggestionIndex = -1;
+    searchInput.setAttribute("aria-expanded", "false");
+  }
+
+  function selectSuggestion(index) {
+    if (index >= 0 && index < searchResultsDiv.children.length) {
+      const selectedText = searchResultsDiv.children[index].textContent;
+      searchInput.value = selectedText;
+      searchTable();
+      hideSearchSuggestions();
+      searchInput.focus();
+    }
+  }
+
+  function highlightSuggestion(index) {
+    const children = searchResultsDiv.children;
+    for (let i = 0; i < children.length; i++) {
+      children[i].classList.toggle("highlighted", i === index);
+    }
+  }
+
+  searchInput.addEventListener("input", showSearchSuggestions);
+  searchInput.addEventListener("blur", () => {
+    setTimeout(hideSearchSuggestions, 150);
+  });
+
+  searchInput.addEventListener("keydown", (e) => {
+    const count = searchResultsDiv.children.length;
+    if (count === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      suggestionIndex = (suggestionIndex + 1) % count;
+      highlightSuggestion(suggestionIndex);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      suggestionIndex = (suggestionIndex - 1 + count) % count;
+      highlightSuggestion(suggestionIndex);
+    } else if (e.key === "Enter") {
+      if (suggestionIndex >= 0 && suggestionIndex < count) {
+        e.preventDefault();
+        selectSuggestion(suggestionIndex);
+      } else {
+        searchTable();
+        hideSearchSuggestions();
+      }
+    } else if (e.key === "Escape") {
+      hideSearchSuggestions();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    toggleTheme(savedTheme === "dark");
+
+    populateYearOptions();
+    loadData();
+
+    document.getElementById("searchInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        searchTable();
+        hideSearchSuggestions();
+      }
+    });
+
+    document.querySelector("#logTable").addEventListener("change", () => {
+      saveData();
+    });
+
+    lastCsvFileName = localStorage.getItem("lastCsvFileName");
+    updateCsvPathDisplay();
+
+    const quickQInput = document.getElementById("quickQInput");
+    quickQInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        showQuickQAnswer();
+      }
+    });
+
+    const quickQModal = document.getElementById("quickQModal");
+    quickQModal.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === "Escape") {
+        e.preventDefault();
+        closeQuickQModal();
+      }
+    });
+  });
+</script>
+</body>
+</html>
